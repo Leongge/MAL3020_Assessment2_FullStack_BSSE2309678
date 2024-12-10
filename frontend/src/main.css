@@ -605,7 +605,7 @@ h2 {
   .home {
     padding-top: 12rem;
   }
-  .search .searchContainer .searchInputs {
+  .search .sectionContainer .searchInputs {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
   }
@@ -641,7 +641,7 @@ h2 {
     width: 95%;
     top: -8%;
   }
-  .search .searchContainer .btns {
+  .search .sectionContainer .btns {
     border-radius: 3rem;
     flex-direction: row;
   }
@@ -690,11 +690,12 @@ h2 {
     width: 95%;
     top: -8%;
   }
-  .search .searchContainer .btns {
+  .search .sectionContainer .btns {
     border-radius: 3rem;
     flex-direction: row;
   }
-  .search .searchContainer .searchInputs {
+  .search .sectionContainer .searchInputs {
+    display: grid;
     grid-template-columns: repeat(3, 1fr);
   }
   .footer .sectionContainer {
@@ -744,15 +745,16 @@ h2 {
   .navBar .navBarTwo .btnOne, .navBar .navBarTwo .toggleIcon {
     display: none;
   }
-  .search .searchContainer .btns {
+  .search .sectionContainer .btns {
     width: 70%;
     border-radius: 3rem;
     flex-direction: row;
   }
-  .search .searchContainer .searchInputs {
+  .search .sectionContainer .searchInputs {
+    display: grid;
     grid-template-columns: repeat(4, 1fr);
   }
-  .search .searchContainer .searchInputs .singleInput .texts input {
+  .search .sectionContainer .searchInputs .singleInput .texts input {
     width: 100%;
   }
   .support .sectionContainer .infoDiv {
@@ -802,7 +804,8 @@ h2 {
     font-size: 22px;
     line-height: 4rem;
   }
-  .search .searchContainer .searchInputs {
+  .search .sectionContainer .searchInputs {
+    display: grid;
     grid-template-columns: repeat(5, 1fr);
   }
   .travelers .sectionContainer .travelersContainer {
@@ -854,7 +857,7 @@ h2 {
     width: 100%;
     top: -10%;
   }
-  .search .searchContainer .btns {
+  .search .sectionContainer .btns {
     width: 50%;
   }
 }

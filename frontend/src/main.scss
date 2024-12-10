@@ -715,7 +715,7 @@ h2{
     }
 
     .search{
-        .searchContainer{
+        .sectionContainer{
             .searchInputs{
                 display: grid;
                 grid-template-columns: repeat(2,1fr);
@@ -776,7 +776,7 @@ h2{
     }
 
     .search{
-        .searchContainer{
+        .sectionContainer{
             .btns{
                 border-radius: 3rem;
                 flex-direction: row;
@@ -864,13 +864,14 @@ h2{
     }
 
     .search{
-        .searchContainer{
+        .sectionContainer{
             .btns{
                 border-radius: 3rem;
                 flex-direction: row;
             }
 
             .searchInputs{
+                display: grid;
                 grid-template-columns: repeat(3,1fr);
             }
         }
@@ -939,7 +940,7 @@ h2{
     }
     
     .search{
-        .searchContainer{
+        .sectionContainer{
             .btns{
                 width: 70%;
                 border-radius: 3rem;
@@ -947,6 +948,7 @@ h2{
             }
 
             .searchInputs{
+                display: grid;
                 grid-template-columns: repeat(4,1fr);
 
                 .singleInput{
@@ -1027,8 +1029,9 @@ h2{
     }
 
     .search{
-        .searchContainer{
+        .sectionContainer{
             .searchInputs{
+                display: grid;
                 grid-template-columns: repeat(5,1fr);
             }
         }
@@ -1106,7 +1109,7 @@ h2{
     }
 
     .search{
-        .searchContainer{
+        .sectionContainer{
             .btns{
                 width: 50%;
             }
