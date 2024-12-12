@@ -357,6 +357,67 @@ h2{
 
 .flight{
     padding-top: 13rem !important;
+    .datepicker-input {
+        width: 100%;
+        border: none;
+        background: transparent;
+        font-size: inherit;
+        color: inherit;
+        outline: none;
+      }
+      
+      .react-datepicker-wrapper {
+        width: 100%;
+      }
+      .autocomplete-container {
+        position: relative;
+      }
+      
+      .suggestions-list {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-top: none;
+        z-index: 10;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .suggestions-list li {
+        padding: 10px;
+        cursor: pointer;
+        font-size: 10px;
+      }
+      
+      .suggestions-list li:hover {
+        background-color: #f0f0f0;
+      }
+      
+      .flightCard .selectionCircle {  
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 2px solid var(--PrimaryColor);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--PrimaryColor);
+        font-weight: bold;
+        background-color: var(--whiteColor);
+    }
+
+    .listTitle{
+        padding-bottom: 2rem;
+    }
 }
 
 //Support section styling =====>
