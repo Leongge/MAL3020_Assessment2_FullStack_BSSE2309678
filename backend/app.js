@@ -1,8 +1,12 @@
 const express = require("express");
 const { MongoClient, ServerApiVersion } = require("mongodb");
+const cors = require("cors");
 
 const app = express();
 const port = 3000;
+
+app.use(cors());
+app.use(express.json());
 
 const uri = "mongodb+srv://leong10722:IIKWbvaS4F4MZyri@mal3020db.9fatm.mongodb.net/?retryWrites=true&w=majority&appName=MAL3020db";
 
@@ -29,7 +33,34 @@ app.get("/api/flights", async (req, res) => {
     console.error("Error retrieving flight data:", error);
     res.status(500).json({ message: "Failed to retrieve flight data" });
   }
+  finally {
+    await client.close(); 
+  }
 });
+
+// New route for IATA codes
+app.get("/api/iata-codes", async (req, res) => {
+  try {
+    await client.connect();
+
+    const database = client.db("Flight"); 
+    const collection = database.collection("iata_codes"); 
+
+    const iataCodes = await collection.find({}).toArray();
+
+    // Optional: Remove the MongoDB ObjectId if you want a cleaner response
+    const cleanedIataCodes = iataCodes.map(({ _id, ...rest }) => rest);
+
+    res.status(200).json(cleanedIataCodes);
+  } catch (error) {
+    console.error("Error retrieving IATA codes:", error);
+    res.status(500).json({ message: "Failed to retrieve IATA codes" });
+  }
+  finally {
+    await client.close(); 
+  }
+});
+
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Flight API!");

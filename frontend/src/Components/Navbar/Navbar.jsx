@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-
+import { Link } from "react-router-dom";
 //Imported Icons =====>
 import {SiConsul} from 'react-icons/si'
 import {BsPhoneVibrate} from 'react-icons/bs'
@@ -59,8 +59,8 @@ const Navbar = () => {
 
         <div className={active}>
           <ul className="menu flex">
-            <li onClick={removeNavBar} className="listItem">Home</li>
-            <li onClick={removeNavBar} className="listItem">About</li>
+            <li onClick={removeNavBar} className="listItem"><Link to="/">Home</Link></li>
+            <li onClick={removeNavBar} className="listItem"><Link to="/flights">Flight</Link></li>
             <li onClick={removeNavBar} className="listItem">Offers</li>
             <li onClick={removeNavBar} className="listItem">Seats</li>
             <li onClick={removeNavBar} className="listItem">Destinations</li>
