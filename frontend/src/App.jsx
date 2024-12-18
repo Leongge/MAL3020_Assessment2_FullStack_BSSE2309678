@@ -9,7 +9,8 @@ import Lounge from "./Components/Lounge/Lounge"
 import Travelers from "./Components/Travelers/Travelers"
 import Subscribers from "./Components/Subscribers/Subscribers"
 import Footer from "./Components/Footer/Footer"
-import Flights from "./Components/Flights/Flights" 
+import Flights from "./Components/Flights/Flights"
+import SignUp from "./Components/SignUp/Signup" 
 
 const App = () => {
   return(
@@ -33,6 +34,13 @@ const App = () => {
           <Route path="/flights" element={
             <>
               <Flights/>
+              <Footer/>
+            </>
+          } />
+
+          <Route path="/signup" element={
+            <>
+              <SignUp/>
               <Footer/>
             </>
           } />

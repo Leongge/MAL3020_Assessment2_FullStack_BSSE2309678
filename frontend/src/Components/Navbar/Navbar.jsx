@@ -1,29 +1,23 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Link } from "react-router-dom";
-//Imported Icons =====>
-import {SiConsul} from 'react-icons/si'
-import {BsPhoneVibrate} from 'react-icons/bs'
-import {AiOutlineGlobal} from 'react-icons/ai'
-import {CgMenuGridO} from 'react-icons/cg'
-
-//Imported Images =====>
+import { CgMenuGridO } from 'react-icons/cg'
 import logo from '../../assets/logo.png'
+import SignIn from './SignIn';
 
 const Navbar = () => {
-
-  //Remove the NavBar in the small width screens ==>
+  // NavBar menu state
   const [active, setActive] = useState('navBarMenu')
-  const showNavBar = ()=>{
+  const showNavBar = () => {
     setActive('navBarMenu showNavBar')
   }
 
-  const removeNavBar = ()=>{
+  const removeNavBar = () => {
     setActive('navBarMenu')
   }
 
-  //Add a background color to the second Navbar ==>
+  // Background color state
   const [noBg, addBg] = useState('navBarTwo')
-  const addBgColor = ()=>{
+  const addBgColor = () => {
     if(window.scrollY >= 10){
       addBg('navBarTwo navbar_With_Bg')
     }else{
@@ -32,52 +26,64 @@ const Navbar = () => {
   }
   window.addEventListener('scroll', addBgColor)
 
+  // SignIn popup state
+  const [showSignIn, setShowSignIn] = useState(false);
+
+  const handleSignInOpen = () => {
+    setShowSignIn(true);
+  }
+
+  const handleSignInClose = () => {
+    setShowSignIn(false);
+  }
+
+  const handleRegisterRedirect = () => {
+    setShowSignIn(false);
+    // Navigate to registration page
+    // You might use react-router's useNavigate hook here
+  }
 
   return (
-    <div className='navBar flex'>
-      <div className="navBarOne flex">
-        <div>
-          <SiConsul/>
-        </div>
+    <>
+      <div className='navBar flex'>
+        <div className={noBg}>
+          <div className="logoDiv">
+            <img src={logo} className='logo' alt="Logo"/>
+          </div>
 
-        <div className="none flex">
-          <li className="flex"><BsPhoneVibrate className='icon'/>Support </li>
-          <li className="flex"><AiOutlineGlobal className='icon'/>Languages</li>
-        </div>
+          <div className={active}>
+            <ul className="menu flex">
+              <li onClick={removeNavBar} className="listItem"><Link to="/">Home</Link></li>
+              <li onClick={removeNavBar} className="listItem"><Link to="/flights">Flight</Link></li>
+              <li onClick={removeNavBar} className="listItem">Offers</li>
+              <li onClick={removeNavBar} className="listItem">Seats</li>
+              <li onClick={removeNavBar} className="listItem"><Link to="/signup">Sign Up</Link></li>
+            </ul> 
 
-        <div className="atb flex">
-          <span>Sign In</span>
-          <span>Sign Out</span>
-        </div>
-      </div>
-
-      <div className={noBg}>
-
-        <div className="logoDiv">
-          <img src={logo} className='logo'/>
-        </div>
-
-        <div className={active}>
-          <ul className="menu flex">
-            <li onClick={removeNavBar} className="listItem"><Link to="/">Home</Link></li>
-            <li onClick={removeNavBar} className="listItem"><Link to="/flights">Flight</Link></li>
-            <li onClick={removeNavBar} className="listItem">Offers</li>
-            <li onClick={removeNavBar} className="listItem">Seats</li>
-            <li onClick={removeNavBar} className="listItem">Destinations</li>
-          </ul> 
-
-          <button onClick={removeNavBar}  className="btn flex btnOne">
-            Contact
+            <button onClick={removeNavBar} className="btn flex btnOne">
+              Contact
+            </button>
+          </div>
+          <button 
+            onClick={handleSignInOpen} 
+            className="btn flex btnTwo"
+          >
+            Sign In
           </button>
-        </div>
-        <button className="btn flex btnTwo">
-          Contact
-        </button>
-        <div onClick={showNavBar} className="toggleIcon">
-          <CgMenuGridO className='icon'/>
+          <div onClick={showNavBar} className="toggleIcon">
+            <CgMenuGridO className='icon'/>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Conditionally render SignIn popup */}
+      {showSignIn && (
+        <SignIn 
+          onClose={handleSignInClose} 
+          onRegister={handleRegisterRedirect} 
+        />
+      )}
+    </>
   )
 }
 

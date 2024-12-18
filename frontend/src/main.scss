@@ -122,42 +122,49 @@ h2{
     width: 100%;
     z-index: 1000;
 
-    .navBarOne, .navBarTwo{
-        justify-content: space-between;
-        padding: 1rem;
-        width: 100%;
-    }
+    // .navBarOne, .navBarTwo{
+    //     justify-content: space-between;
+    //     padding: 1rem;
+    //     width: 100%;
+    // }
 
-    .navBarOne{
-        background: var(--SecondaryColor);
+    // .navBarTwo{
+    //     justify-content: space-between;
+    //     padding: 1rem;
+    //     width: 100%;
+    // }
 
-        .icon:hover{
-            color: var(--PrimaryColor);
-        }
+    // .navBarOne{
+    //     background: var(--SecondaryColor);
 
-        .atb{
-            gap: 1rem;
+    //     .icon:hover{
+    //         color: var(--PrimaryColor);
+    //     }
 
-                span{
-                    color:var(--blackColor);
-                    font-size: 13px;
-                    cursor: pointer;
+    //     .atb{
+    //         gap: 1rem;
 
-                    &:hover{
-                        color: var(--PrimaryColor);
-                        font-size: 700;
-                    }
-                }
-        }
-    }
+    //             span{
+    //                 color:var(--blackColor);
+    //                 font-size: 13px;
+    //                 cursor: pointer;
+
+    //                 &:hover{
+    //                     color: var(--PrimaryColor);
+    //                     font-size: 700;
+    //                 }
+    //             }
+    //     }
+    // }
 
     .navBarTwo{
         display: flex;
         align-items: center;
         justify-content: space-between;
-        top: 3rem;
+        top: 0rem;
         padding: 1.5rem 1rem;
         position: fixed;
+        width: 100%;
         transition: .3s ease-in-out;
 
         .logoDiv{
@@ -356,7 +363,7 @@ h2{
 }
 
 .flight{
-    padding-top: 13rem !important;
+    padding-top: 10rem !important;
     .datepicker-input {
         width: 100%;
         border: none;
@@ -417,6 +424,241 @@ h2{
 
     .listTitle{
         padding-bottom: 2rem;
+    }
+}
+
+.register{
+    padding-top: 10rem !important;
+    .register-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: var(--SecondaryColor);
+        padding: 2rem;
+    }
+
+    .register-form {
+        width: 100%;
+        max-width: 800px;
+        padding: 2rem;
+        background-color: var(--whiteColor);
+        border-radius: 10px;
+        box-shadow: var(--boxShadow);
+    }
+
+    .register-title {
+        text-align: center;
+        color: var(--PrimaryColor);
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--textColor);
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid var(--borderColor);
+        border-radius: 5px;
+        background-color: var(--inputColor);
+        transition: var(--transition);
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: var(--PrimaryColor);
+    }
+
+    .form-row {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .form-row .form-group {
+        flex: 1;
+    }
+
+    .submit-button {
+        width: 100%;
+        padding: 0.75rem;
+        background-color: var(--PrimaryColor);
+        color: var(--whiteColor);
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .submit-button:hover {
+        background-color: var(--HoverColor);
+    }
+
+    .error {
+        border-color: red;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+    }
+
+    .state-input {
+        position: relative;
+    }
+
+    .suggestions-list {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-top: none;
+        z-index: 10;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .suggestions-list li {
+        padding: 10px;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+    .suggestions-list li:hover {
+        background-color: var(--SecondaryColor);
+    }
+}
+
+.SignIn{
+    .signin-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    
+    .signin-container {
+        position: relative;
+        width: 100%;
+        max-width: 500px;
+        background-color: var(--whiteColor);
+        border-radius: 10px;
+        box-shadow: var(--boxShadow);
+        padding: 2rem;
+    }
+    
+    .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+        color: var(--textColor);
+        transition: var(--transition);
+    }
+    
+    .close-button:hover {
+        color: var(--PrimaryColor);
+    }
+    
+    .signin-form {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .signin-title {
+        text-align: center;
+        color: var(--PrimaryColor);
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--textColor);
+    }
+    
+    .form-group input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid var(--borderColor);
+        border-radius: 5px;
+        background-color: var(--inputColor);
+        transition: var(--transition);
+    }
+    
+    .form-group input:focus {
+        outline: none;
+        border-color: var(--PrimaryColor);
+    }
+    
+    .submit-button {
+        width: 100%;
+        padding: 0.75rem;
+        background-color: var(--PrimaryColor);
+        color: var(--whiteColor);
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: var(--transition);
+        margin-top: 1rem;
+    }
+    
+    .submit-button:hover {
+        background-color: var(--HoverColor);
+    }
+    
+    .error {
+        border-color: red;
+    }
+    
+    .error-message {
+        color: red;
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+    }
+    
+    .signup-prompt {
+        text-align: center;
+        margin-top: 1rem;
+        color: var(--textColor);
+    }
+    
+    .register-link {
+        color: var(--PrimaryColor);
+        cursor: pointer;
+        font-weight: bold;
+        transition: var(--transition);
+    }
+    
+    .register-link:hover {
+        color: var(--HoverColor);
+        text-decoration: underline;
     }
 }
 
@@ -1031,23 +1273,23 @@ h2{
 @media screen and (min-width: 768px) {
     .navBar{
         align-items: center;
-        .navBarOne{
-            .none{
-                display: flex;
-                gap: 1.5rem;
+        // .navBarOne{
+        //     .none{
+        //         display: flex;
+        //         gap: 1.5rem;
 
-                li{
-                    font-size: 13px;
-                    gap: .5rem;
-                    color: var(--textColor);
-                    &:hover{
-                        color:var(--PrimaryColor);
-                        text-decoration: underline;
-                    }
-                }
+        //         li{
+        //             font-size: 13px;
+        //             gap: .5rem;
+        //             color: var(--textColor);
+        //             &:hover{
+        //                 color:var(--PrimaryColor);
+        //                 text-decoration: underline;
+        //             }
+        //         }
 
-            }
-        }
+        //     }
+        // }
         .navBarTwo{
             justify-content: space-between;
             align-items: center;
@@ -1218,7 +1460,11 @@ h2{
     }
 
     .navBar{
-        .navBarOne .navBarTwo{
+        // .navBarOne .navBarTwo{
+        //     padding: 1.5rem 5rem;
+        // }
+
+        .navBarTwo{
             padding: 1.5rem 5rem;
         }
 

@@ -116,36 +116,14 @@ h2 {
   width: 100%;
   z-index: 1000;
 }
-.navBar .navBarOne, .navBar .navBarTwo {
-  justify-content: space-between;
-  padding: 1rem;
-  width: 100%;
-}
-.navBar .navBarOne {
-  background: var(--SecondaryColor);
-}
-.navBar .navBarOne .icon:hover {
-  color: var(--PrimaryColor);
-}
-.navBar .navBarOne .atb {
-  gap: 1rem;
-}
-.navBar .navBarOne .atb span {
-  color: var(--blackColor);
-  font-size: 13px;
-  cursor: pointer;
-}
-.navBar .navBarOne .atb span:hover {
-  color: var(--PrimaryColor);
-  font-size: 700;
-}
 .navBar .navBarTwo {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  top: 3rem;
+  top: 0rem;
   padding: 1.5rem 1rem;
   position: fixed;
+  width: 100%;
   transition: 0.3s ease-in-out;
 }
 .navBar .navBarTwo .logoDiv .logo {
@@ -311,7 +289,7 @@ h2 {
 }
 
 .flight {
-  padding-top: 13rem !important;
+  padding-top: 10rem !important;
 }
 .flight .datepicker-input {
   width: 100%;
@@ -367,6 +345,207 @@ h2 {
 }
 .flight .listTitle {
   padding-bottom: 2rem;
+}
+
+.register {
+  padding-top: 10rem !important;
+}
+.register .register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--SecondaryColor);
+  padding: 2rem;
+}
+.register .register-form {
+  width: 100%;
+  max-width: 800px;
+  padding: 2rem;
+  background-color: var(--whiteColor);
+  border-radius: 10px;
+  box-shadow: var(--boxShadow);
+}
+.register .register-title {
+  text-align: center;
+  color: var(--PrimaryColor);
+  margin-bottom: 1.5rem;
+}
+.register .form-group {
+  margin-bottom: 1rem;
+}
+.register .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--textColor);
+}
+.register .form-group input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--borderColor);
+  border-radius: 5px;
+  background-color: var(--inputColor);
+  transition: var(--transition);
+}
+.register .form-group input:focus {
+  outline: none;
+  border-color: var(--PrimaryColor);
+}
+.register .form-row {
+  display: flex;
+  gap: 1rem;
+}
+.register .form-row .form-group {
+  flex: 1;
+}
+.register .submit-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--PrimaryColor);
+  color: var(--whiteColor);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.register .submit-button:hover {
+  background-color: var(--HoverColor);
+}
+.register .error {
+  border-color: red;
+}
+.register .error-message {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+.register .state-input {
+  position: relative;
+}
+.register .suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  z-index: 10;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.register .suggestions-list li {
+  padding: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.register .suggestions-list li:hover {
+  background-color: var(--SecondaryColor);
+}
+
+.SignIn .signin-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.SignIn .signin-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  background-color: var(--whiteColor);
+  border-radius: 10px;
+  box-shadow: var(--boxShadow);
+  padding: 2rem;
+}
+.SignIn .close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--textColor);
+  transition: var(--transition);
+}
+.SignIn .close-button:hover {
+  color: var(--PrimaryColor);
+}
+.SignIn .signin-form {
+  display: flex;
+  flex-direction: column;
+}
+.SignIn .signin-title {
+  text-align: center;
+  color: var(--PrimaryColor);
+  margin-bottom: 1.5rem;
+}
+.SignIn .form-group {
+  margin-bottom: 1rem;
+}
+.SignIn .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--textColor);
+}
+.SignIn .form-group input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--borderColor);
+  border-radius: 5px;
+  background-color: var(--inputColor);
+  transition: var(--transition);
+}
+.SignIn .form-group input:focus {
+  outline: none;
+  border-color: var(--PrimaryColor);
+}
+.SignIn .submit-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--PrimaryColor);
+  color: var(--whiteColor);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 1rem;
+}
+.SignIn .submit-button:hover {
+  background-color: var(--HoverColor);
+}
+.SignIn .error {
+  border-color: red;
+}
+.SignIn .error-message {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+.SignIn .signup-prompt {
+  text-align: center;
+  margin-top: 1rem;
+  color: var(--textColor);
+}
+.SignIn .register-link {
+  color: var(--PrimaryColor);
+  cursor: pointer;
+  font-weight: bold;
+  transition: var(--transition);
+}
+.SignIn .register-link:hover {
+  color: var(--HoverColor);
+  text-decoration: underline;
 }
 
 .support .sectionContainer .tittlesDiv {
@@ -830,19 +1009,6 @@ h2 {
   .navBar {
     align-items: center;
   }
-  .navBar .navBarOne .none {
-    display: flex;
-    gap: 1.5rem;
-  }
-  .navBar .navBarOne .none li {
-    font-size: 13px;
-    gap: 0.5rem;
-    color: var(--textColor);
-  }
-  .navBar .navBarOne .none li:hover {
-    color: var(--PrimaryColor);
-    text-decoration: underline;
-  }
   .navBar .navBarTwo {
     justify-content: space-between;
     align-items: center;
@@ -957,7 +1123,7 @@ h2 {
     width: 75%;
     margin: auto;
   }
-  .navBar .navBarOne .navBarTwo {
+  .navBar .navBarTwo {
     padding: 1.5rem 5rem;
   }
   .navBar .navbar_With_Bg {
