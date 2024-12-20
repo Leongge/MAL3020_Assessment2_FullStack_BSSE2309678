@@ -11,6 +11,7 @@ import Subscribers from "./Components/Subscribers/Subscribers"
 import Footer from "./Components/Footer/Footer"
 import Flights from "./Components/Flights/Flights"
 import SignUp from "./Components/SignUp/Signup" 
+import Booking from "./Components/Flights/Booking"
 
 const App = () => {
   return(
@@ -41,6 +42,12 @@ const App = () => {
           <Route path="/signup" element={
             <>
               <SignUp/>
+              <Footer/>
+            </>
+          } />
+          <Route path="/booking" element={  
+            <>
+              <Booking/>
               <Footer/>
             </>
           } />

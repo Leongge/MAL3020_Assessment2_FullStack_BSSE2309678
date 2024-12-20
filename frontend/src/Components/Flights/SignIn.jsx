@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 
-const SignIn = ({ onClose }) => {
+const SignIn = ({ onClose, onLoginSuccess }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
@@ -106,8 +106,17 @@ const SignIn = ({ onClose }) => {
 
       // Handle successful login
       console.log('Login successful');
-      onClose(); // Close the popup
-      navigate('/flights');
+      
+      // Close the popup and trigger login success callback
+      onClose();
+      
+      // If onLoginSuccess prop is provided, call it
+      if (onLoginSuccess) {
+        onLoginSuccess();
+      } else {
+        // Default behavior if no callback
+        navigate('/flights');
+      }
     } catch (error) {
       console.error('Login error:', error);
       // You might want to set a general error message here

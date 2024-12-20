@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -11,7 +12,12 @@ import {RxCalendar} from 'react-icons/rx'
 import Aos from "aos"
 import 'aos/dist/aos.css'
 
+// Import SignIn component
+import SignIn from './SignIn'
+
 const Flights = () => {
+    const navigate = useNavigate();
+    
     // State for flight search and filtering
     const [flights, setFlights] = useState([]);
     const [departureTripFlights, setDepartureTripFlights] = useState([]);
@@ -32,6 +38,10 @@ const Flights = () => {
     const [iataCodes, setIataCodes] = useState([]);
     const [locationSuggestions, setLocationSuggestions] = useState([]);
     const [destinationSuggestions, setDestinationSuggestions] = useState([]);
+
+    // State for SignIn popup
+    const [showSignIn, setShowSignIn] = useState(false);
+    const [bookingContext, setBookingContext] = useState(null);
 
     // Initialize AOS and fetch IATA codes on component mount
     useEffect(() => {
@@ -93,6 +103,56 @@ const Flights = () => {
         setActiveClass(flightClass);
     };
 
+    // Check login status before navigation
+    const checkLoginAndNavigate = (context) => {
+        const session = localStorage.getItem('userSession');
+        if (!session) {
+            // Set booking context and show sign-in popup
+            setBookingContext(context);
+            setShowSignIn(true);
+        } else {
+            // Navigate directly to booking
+            navigateToBooking(context);
+        }
+    };
+
+    // Navigate to booking page
+    const navigateToBooking = (context) => {
+        navigate('/booking', { 
+            state: context
+        });
+    };
+
+    // Handle single trip flight selection
+    const handleSingleTripFlightSelection = (flight) => {
+        if (returnDate) {
+            // If return date is selected, just mark the departure flight
+            setSelectedDepartureFlight(flight);
+        } else {
+            // For single trip, navigate to booking
+            checkLoginAndNavigate({ 
+                departureFlight: flight, 
+                isReturnTrip: false 
+            });
+        }
+    };
+
+    // Handle return trip booking
+    const handleReturnTripBooking = () => {
+        // Ensure both departure and return flights are selected
+        if (!selectedDepartureFlight || !selectedReturnFlight) {
+            alert('Please select both departure and return flights');
+            return;
+        }
+
+        // Check login and navigate
+        checkLoginAndNavigate({ 
+            departureFlight: selectedDepartureFlight, 
+            returnFlight: selectedReturnFlight,
+            isReturnTrip: true 
+        });
+    };
+
     // Main flight search handler
     const handleSearch = async () => {
         // Validate mandatory fields
@@ -143,9 +203,30 @@ const Flights = () => {
         }
     };
 
+    // Handle login success
+    const handleLoginSuccess = () => {
+        // Close sign-in popup
+        setShowSignIn(false);
+        
+        // If there's a booking context, navigate to booking
+        if (bookingContext) {
+            navigateToBooking(bookingContext);
+            // Reset booking context
+            setBookingContext(null);
+        }
+    };
+
     return (
         <div className="search container section flight">
-            <div  className="sectionContainer grid">
+            {/* Show SignIn popup if needed */}
+            {showSignIn && (
+                <SignIn 
+                    onClose={() => setShowSignIn(false)}
+                    onLoginSuccess={handleLoginSuccess}
+                />
+            )}
+
+            <div className="sectionContainer grid">
                 {/* Flight Class Selection */}
                 <div className="btns flex">
                     {['Economy', 'Business', 'First Class'].map(flightClass => (
@@ -273,14 +354,14 @@ const Flights = () => {
                                 <div 
                                     key={flight._id} 
                                     className={`flightCard ${selectedDepartureFlight?._id === flight._id ? 'selected' : ''}`}
-                                    onClick={() => setSelectedDepartureFlight(flight)}
+                                    onClick={() => handleSingleTripFlightSelection(flight)}
                                 >
                                     <div className="flightInfo">
                                         <h4>{flight.airline} - {flight.flightNumber}</h4>
                                         <p>From: {flight.departureAirport} To: {flight.arrivalAirport}</p>
                                         <p>Departure: {new Date(flight.departureTime).toLocaleString()}</p>
                                         <p>Arrival: {new Date(flight.arrivalTime).toLocaleString()}</p>
-                                        <p>Price: ${flight.price}</p>
+                                        <p>Price: RM{flight.price}</p>
                                         <p>Available Seats: {flight.availableSeats}</p>
                                         <p>Class: {flight.type}</p>
                                     </div>
@@ -288,7 +369,7 @@ const Flights = () => {
                                         <h5>Add-ons:</h5>
                                         {flight.addons.map((addon, index) => (
                                             <div key={index} className="addon">
-                                                <p>{addon.description} - ${addon.price}</p>
+                                                <p>{addon.description} - RM{addon.price}</p>
                                             </div>
                                         ))}
                                     </div>
@@ -322,18 +403,18 @@ const Flights = () => {
                                             <p>From: {flight.departureAirport} To: {flight.arrivalAirport}</p>
                                             <p>Departure: {new Date(flight.departureTime).toLocaleString()}</p>
                                             <p>Arrival: {new Date(flight.arrivalTime).toLocaleString()}</p>
-                                            <p>Price: ${flight.price}</p>
+                                            <p>Price: RM{flight.price}</p>
                                             <p>Available Seats: {flight.availableSeats}</p>
                                             <p>Class: {flight.type}</p>
                                         </div>
                                         <div className="flightAddons">
-                                        <h5>Add-ons:</h5>
-                                        {flight.addons.map((addon, index) => (
-                                            <div key={index} className="addon">
-                                                <p>{addon.description} - ${addon.price}</p>
-                                            </div>
-                                        ))}
-                                    </div>
+                                            <h5>Add-ons:</h5>
+                                            {flight.addons.map((addon, index) => (
+                                                <div key={index} className="addon">
+                                                    <p>{addon.description} - RM{addon.price}</p>
+                                                </div>
+                                            ))}
+                                        </div>
                                         <div className="selectionCircle">
                                             {selectedReturnFlight?._id === flight._id ? '✓' : ''}
                                         </div>
@@ -345,6 +426,16 @@ const Flights = () => {
                                 </p>
                             )}
                         </div>
+                    )}
+
+                    {/* Proceed to Booking Button for Return Trips */}
+                    {returnDate && selectedDepartureFlight && selectedReturnFlight && (
+                        <button 
+                            className='btn btnBlock flex' 
+                            onClick={handleReturnTripBooking}
+                        >
+                            Proceed to Booking
+                        </button>
                     )}
                 </div>
             </div>

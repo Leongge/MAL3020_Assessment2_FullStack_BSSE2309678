@@ -903,6 +903,145 @@ h2 {
   font-size: 0.8rem;
 }
 
+.booking {
+  /* Responsive Design */
+}
+.booking .booking-container {
+  width: 100%;
+  max-width: 1170px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background-color: var(--SecondaryColor);
+}
+.booking .booking-container h1 {
+  text-align: center;
+  color: var(--PrimaryColor);
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+.booking .flight-details {
+  background-color: var(--whiteColor);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--boxShadow);
+}
+.booking .flight-details h2 {
+  color: var(--PrimaryColor);
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--borderColor);
+  padding-bottom: 0.5rem;
+}
+.booking .flight-card {
+  background-color: var(--SecondaryColor);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.booking .flight-card h3 {
+  color: var(--blackColor);
+  margin-bottom: 0.5rem;
+}
+.booking .flight-card p {
+  color: var(--textColor);
+  margin: 0.3rem 0;
+}
+.booking .flight-addons {
+  margin-top: 1rem;
+  border-top: 1px solid var(--borderColor);
+  padding-top: 1rem;
+}
+.booking .flight-addons h4 {
+  color: var(--PrimaryColor);
+  margin-bottom: 0.5rem;
+}
+.booking .addon-item {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+.booking .addon-item input[type=checkbox] {
+  margin-right: 0.5rem;
+  accent-color: var(--PrimaryColor);
+}
+.booking .passenger-form {
+  background-color: var(--whiteColor);
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: var(--boxShadow);
+}
+.booking .passenger-form h2 {
+  color: var(--PrimaryColor);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.booking .form-group {
+  margin-bottom: 1rem;
+}
+.booking .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--blackColor);
+}
+.booking .form-group input,
+.booking .form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--borderColor);
+  border-radius: 5px;
+  background-color: var(--inputColor);
+  color: var(--textColor);
+  transition: var(--transition);
+}
+.booking .form-group input:focus,
+.booking .form-group select:focus {
+  outline: none;
+  border-color: var(--PrimaryColor);
+  box-shadow: 0 0 0 2px rgba(225, 128, 122, 0.2);
+}
+.booking .react-datepicker-wrapper {
+  width: 100%;
+}
+.booking .react-datepicker__input-container input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--borderColor);
+  border-radius: 5px;
+  background-color: var(--inputColor);
+  color: var(--textColor);
+  transition: var(--transition);
+}
+.booking .submit-booking-btn {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--PrimaryColor);
+  color: var(--whiteColor);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 1rem;
+}
+.booking .submit-booking-btn:hover {
+  background-color: var(--HoverColor);
+}
+@media screen and (max-width: 768px) {
+  .booking .booking-container {
+    padding: 1rem 0.5rem;
+  }
+  .booking .flight-details,
+  .booking .passenger-form {
+    padding: 1rem;
+  }
+  .booking .form-group input,
+  .booking .form-group select {
+    padding: 0.5rem;
+  }
+  .booking .submit-booking-btn {
+    padding: 0.75rem;
+  }
+}
+
 @media screen and (min-width: 480px) {
   .home {
     padding-top: 12rem;
