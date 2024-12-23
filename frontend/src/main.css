@@ -904,6 +904,9 @@ h2 {
 }
 
 .booking {
+  padding-top: 10rem !important;
+  padding-bottom: 3rem !important;
+  /* Main Passenger Info Styles */
   /* Responsive Design */
 }
 .booking .booking-container {
@@ -1025,6 +1028,96 @@ h2 {
 .booking .submit-booking-btn:hover {
   background-color: var(--HoverColor);
 }
+.booking .main-passenger-info {
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+.booking .passenger-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit);
+  gap: 1rem;
+}
+.booking .passenger-count-section {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.booking .passenger-type-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.booking .passenger-type {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e9ecef;
+}
+.booking .passenger-type:last-child {
+  border-bottom: none;
+}
+.booking .counter-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.booking .counter-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #dee2e6;
+  background-color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.2s;
+}
+.booking .counter-btn:hover:not(:disabled) {
+  background-color: #e9ecef;
+}
+.booking .counter-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.booking .count {
+  min-width: 30px;
+  text-align: center;
+  font-weight: bold;
+}
+.booking .price-breakdown {
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+.booking .breakdown-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e1e8ed;
+}
+.booking .breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+  padding: 0.5rem 0;
+}
+.booking .breakdown-total {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #3498db;
+}
+.booking .breakdown-item.total {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
 @media screen and (max-width: 768px) {
   .booking .booking-container {
     padding: 1rem 0.5rem;
@@ -1039,6 +1132,402 @@ h2 {
   }
   .booking .submit-booking-btn {
     padding: 0.75rem;
+  }
+}
+
+.Confirmation .booking-confirmation {
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #f5f5f5;
+}
+.Confirmation .confirmation-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+.Confirmation .success-header {
+  background: linear-gradient(135deg, #1a73e8, #0d47a1);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+.Confirmation .success-icon {
+  width: 64px;
+  height: 64px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+}
+.Confirmation .booking-reference {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+.Confirmation .flight-details-card,
+.Confirmation .passenger-details-card,
+.Confirmation .addons-card,
+.Confirmation .price-summary-card {
+  padding: 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+.Confirmation .flight-info {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+.Confirmation .flight-route {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+.Confirmation .arrow {
+  color: #1a73e8;
+}
+.Confirmation .flight-times {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.Confirmation .time-group label {
+  color: #666;
+  font-size: 0.9rem;
+}
+.Confirmation .time-group p {
+  margin: 0.25rem 0 0;
+  font-weight: 500;
+}
+.Confirmation .passenger-info {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+.Confirmation .passenger-info p {
+  margin: 0.5rem 0;
+}
+.Confirmation .additional-passengers {
+  margin-top: 1.5rem;
+}
+.Confirmation .addons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.Confirmation .addon-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+.Confirmation .total-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+.Confirmation .price {
+  color: #1a73e8;
+}
+.Confirmation .action-buttons {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+.Confirmation .print-button,
+.Confirmation .home-button {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.Confirmation .print-button {
+  background-color: #1a73e8;
+  color: white;
+}
+.Confirmation .print-button:hover {
+  background-color: #1557b0;
+}
+.Confirmation .home-button {
+  background-color: #f8f9fa;
+  color: #1a73e8;
+  border: 1px solid #1a73e8;
+}
+.Confirmation .home-button:hover {
+  background-color: #e8f0fe;
+}
+.Confirmation .passengers-section {
+  margin: 2rem 0;
+}
+.Confirmation .passenger-info {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.Confirmation .qr-code {
+  margin-top: 1rem;
+  text-align: center;
+}
+.Confirmation .qr-image {
+  max-width: 200px;
+  margin: 1rem auto;
+}
+.Confirmation .additional-passengers {
+  margin-top: 2rem;
+}
+.Confirmation .addon-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e9ecef;
+}
+.Confirmation .addon-type {
+  text-transform: capitalize;
+}
+.Confirmation .addon-price {
+  font-weight: bold;
+}
+@media print {
+  .Confirmation .action-buttons {
+    display: none;
+  }
+  .Confirmation .booking-confirmation {
+    padding: 0;
+    background: white;
+  }
+  .Confirmation .confirmation-container {
+    box-shadow: none;
+  }
+}
+@media (max-width: 600px) {
+  .Confirmation .booking-confirmation {
+    padding: 1rem;
+  }
+  .Confirmation .flight-times {
+    grid-template-columns: 1fr;
+  }
+  .Confirmation .action-buttons {
+    flex-direction: column;
+  }
+}
+
+.history {
+  padding-top: 10rem !important;
+  padding-bottom: 3rem !important;
+  /* History.css */
+}
+.history .history-page {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.history .history-page h1 {
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+}
+.history .booking-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+.history .booking-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+.history .booking-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.history .booking-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+.history .booking-status {
+  color: #4CAF50;
+  font-weight: bold;
+}
+.history .flight-info {
+  margin: 15px 0;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+.history .route {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.history .arrow {
+  color: #666;
+}
+.history .datetime {
+  font-size: 0.9em;
+  color: #666;
+}
+.history .datetime div {
+  margin: 5px 0;
+}
+.history .datetime label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+.history .booking-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+  font-size: 0.9em;
+  color: #666;
+}
+.history .loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.2em;
+  color: #666;
+}
+
+.historyDetail {
+  /* HistoryDetail.css */
+}
+.historyDetail .history-detail {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.historyDetail .booking-detail {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+}
+.historyDetail .detail-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.historyDetail .header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.historyDetail .status-icon {
+  width: 60px;
+  height: 60px;
+  background: #1a73e8;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+.historyDetail .booking-reference {
+  color: #666;
+  margin: 10px 0;
+}
+.historyDetail .booking-status {
+  color: #1a73e8;
+  font-weight: bold;
+  margin: 10px 0;
+}
+.historyDetail .flight-details-card,
+.historyDetail .passenger-details-card,
+.historyDetail .addons-card,
+.historyDetail .price-summary-card {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+.historyDetail .flight-route {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+}
+.historyDetail .airport {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+.historyDetail .arrow {
+  color: #666;
+}
+.historyDetail .flight-times {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 20px 0;
+}
+.historyDetail .time-group label {
+  color: #666;
+  display: block;
+  margin-bottom: 5px;
+}
+.historyDetail .qr-code {
+  text-align: center;
+  margin: 20px 0;
+}
+.historyDetail .qr-image {
+  max-width: 200px;
+  margin: 10px auto;
+}
+.historyDetail .action-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 40px;
+}
+.historyDetail .print-button,
+.historyDetail .back-button {
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+.historyDetail .print-button {
+  background-color: #1a73e8;
+  color: white;
+}
+.historyDetail .back-button {
+  background-color: #666;
+  color: white;
+}
+.historyDetail .print-button:hover,
+.historyDetail .back-button:hover {
+  opacity: 0.9;
+}
+@media print {
+  .historyDetail .action-buttons {
+    display: none;
   }
 }
 
