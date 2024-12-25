@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { io } from 'socket.io-client';
 
 //Imported Icons ===========>
 import {HiOutlineLocationMarker} from 'react-icons/hi'
@@ -14,6 +15,8 @@ import 'aos/dist/aos.css'
 
 // Import SignIn component
 import SignIn from './SignIn'
+
+const socket = io('http://localhost:3000');
 
 const Flights = () => {
     const navigate = useNavigate();
@@ -42,6 +45,7 @@ const Flights = () => {
     // State for SignIn popup
     const [showSignIn, setShowSignIn] = useState(false);
     const [bookingContext, setBookingContext] = useState(null);
+    const [updateMessage, setUpdateMessage] = useState('');
 
     // Initialize AOS and fetch IATA codes on component mount
     useEffect(() => {
@@ -58,6 +62,35 @@ const Flights = () => {
         };
         
         fetchIataCodes();
+        socket.on('flightUpdated', (updatedFlight) => {
+            setUpdateMessage('Flight information has been updated!');
+            setTimeout(() => setUpdateMessage(''), 3000);
+            console.log('Flight updated:', updatedFlight);
+            
+            setDepartureTripFlights(prev => 
+                prev.map(flight => 
+                    flight._id === updatedFlight._id ? updatedFlight : flight
+                )
+            );
+
+            setReturnTripFlights(prev => 
+                prev.map(flight => 
+                    flight._id === updatedFlight._id ? updatedFlight : flight
+                )
+            );
+
+            if (selectedDepartureFlight?._id === updatedFlight._id) {
+                setSelectedDepartureFlight(updatedFlight);
+            }
+            if (selectedReturnFlight?._id === updatedFlight._id) {
+                setSelectedReturnFlight(updatedFlight);
+            }
+        });
+
+        return () => {
+            socket.off('flightUpdated');
+        };
+        
     }, []);
 
     // Handle location input change with autocomplete suggestions
@@ -227,6 +260,21 @@ const Flights = () => {
             )}
 
             <div className="sectionContainer grid">
+                    {updateMessage && (
+                        <div className="update-message" style={{
+                            position: 'center',
+                            top: '20px',
+                            right: '20px',
+                            backgroundColor: '#4CAF50',
+                            color: 'white',
+                            padding: '10px 20px',
+                            borderRadius: '4px',
+                            zIndex: 1000,
+                            animation: 'fadeIn 0.3s'
+                        }}>
+                            {updateMessage}
+                        </div>
+                    )}
                 {/* Flight Class Selection */}
                 <div className="btns flex">
                     {['Economy', 'Business', 'First Class'].map(flightClass => (

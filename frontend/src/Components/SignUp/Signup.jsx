@@ -23,7 +23,7 @@ const RegisterPage = () => {
   const [emailError, setEmailError] = useState('');
   const [identityNoError, setIdentityNoError] = useState('');
 
-  // Simple password hashing (note: this is NOT cryptographically secure)
+  // Simple password hashing 
   const simpleHashPassword = (password) => {
     let hash = 0;
     for (let i = 0; i < password.length; i++) {

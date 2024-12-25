@@ -11,20 +11,23 @@ const SignIn = ({ onClose }) => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  // Check existing session on component mount
   useEffect(() => {
     const checkSession = () => {
       const session = localStorage.getItem('userSession');
+      const adminSession = localStorage.getItem('adminSession');
+      
+      if (adminSession) {
+        navigate('/admin/flights');
+        return true;
+      }
+      
       if (session) {
         const sessionData = JSON.parse(session);
         const currentTime = new Date().getTime();
-        
-        // Check if session is still valid (within 10 minutes)
         if (currentTime - sessionData.timestamp < 10 * 60 * 1000) {
           navigate('/flights');
           return true;
         } else {
-          // Clear expired session
           localStorage.removeItem('userSession');
         }
       }
@@ -37,8 +40,6 @@ const SignIn = ({ onClose }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
-    // Clear previous errors when user starts typing
     if (name === 'email') setEmailError('');
     if (name === 'password') setPasswordError('');
   };
@@ -50,39 +51,34 @@ const SignIn = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Reset previous errors
     setEmailError('');
     setPasswordError('');
 
-    // Validate email
     if (!validateEmail(formData.email)) {
       setEmailError('Invalid email format');
       return;
     }
 
-    // Validate password (basic length check)
     if (formData.password.length < 6) {
       setPasswordError('Password must be at least 6 characters');
       return;
     }
 
+    const simpleHashPassword = (password) => {
+      let hash = 0;
+      for (let i = 0; i < password.length; i++) {
+        const char = password.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      return hash.toString();
+    };
+
+    const passwordHash = simpleHashPassword(formData.password);
+
     try {
-      // Simple password hashing
-      const simpleHashPassword = (password) => {
-        let hash = 0;
-        for (let i = 0; i < password.length; i++) {
-          const char = password.charCodeAt(i);
-          hash = ((hash << 5) - hash) + char;
-          hash = hash & hash;
-        }
-        return hash.toString();
-      };
-
-      const passwordHash = simpleHashPassword(formData.password);
-
-      // Submit to API
-      const response = await fetch('http://localhost:3000/api/login', {
+      // First try admin login
+      const adminResponse = await fetch('http://localhost:3000/api/admin/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,24 +89,45 @@ const SignIn = ({ onClose }) => {
         })
       });
 
-      if (!response.ok) {
-        throw new Error('Login failed');
+      if (adminResponse.ok) {
+        const adminData = await adminResponse.json();
+        const sessionData = {
+          email: formData.email,
+          timestamp: new Date().getTime(),
+          isAdmin: true
+        };
+        localStorage.setItem('adminSession', JSON.stringify(sessionData));
+        onClose();
+        navigate('/admin/flights');
+        return;
       }
 
-      // Create a session with timestamp
-      const sessionData = {
-        email: formData.email,
-        timestamp: new Date().getTime()
-      };
-      localStorage.setItem('userSession', JSON.stringify(sessionData));
+      // If not admin, try regular user login
+      const userResponse = await fetch('http://localhost:3000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          passwordHash: passwordHash
+        })
+      });
 
-      // Handle successful login
-      console.log('Login successful');
-      onClose(); // Close the popup
-      navigate('/flights');
+      if (userResponse.ok) {
+        const sessionData = {
+          email: formData.email,
+          timestamp: new Date().getTime()
+        };
+        localStorage.setItem('userSession', JSON.stringify(sessionData));
+        onClose();
+        navigate('/flights');
+      } else {
+        throw new Error('Invalid credentials');
+      }
     } catch (error) {
       console.error('Login error:', error);
-      // You might want to set a general error message here
+      setEmailError('Invalid email or password');
     }
   };
 

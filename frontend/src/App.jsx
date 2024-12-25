@@ -15,13 +15,17 @@ import Booking from "./Components/Flights/Booking"
 import Confirmation from "./Components/Flights/Confirmation"
 import History from "./Components/History/History"
 import HistoryDetail from "./Components/History/HistoryDetail"
+import AdminLayout from "./Components/Admin/AdminLayout"
+import AdminFlights from "./Components/Admin/AdminFlights"
+import AdminAirports from "./Components/Admin/AdminAirports"
 
 const AppContent = () => {
   const location = useLocation(); // Get the current path
   
   // Determine if Navbar and Footer should be hidden
   const hideNavbarFooter = location.pathname === "/confirmation" || 
-  location.pathname.startsWith("/history/");
+  location.pathname.startsWith("/history/") ||
+  location.pathname.startsWith("/admin/");
 
   return (
     <div>
@@ -67,6 +71,16 @@ const AppContent = () => {
         } />
         <Route path="/history/:bookingId" element={<HistoryDetail />} />
         <Route path="/confirmation" element={<Confirmation />} />
+        <Route path="/admin/flights" element={
+          <AdminLayout>
+            <AdminFlights />
+          </AdminLayout>
+        } />
+        <Route path="/admin/airports" element={
+          <AdminLayout>
+            <AdminAirports />
+          </AdminLayout>
+        } />
       </Routes>
       {!hideNavbarFooter}
     </div>

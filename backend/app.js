@@ -1,12 +1,29 @@
 const express = require("express");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion,ObjectId } = require("mongodb");
 const cors = require("cors");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 
 const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"]
+  }
+});
 const port = 3000;
 
 app.use(cors());
 app.use(express.json());
+
+io.on("connection", (socket) => {
+  console.log("Client connected");
+  
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});
 
 const uri = "mongodb+srv://leong10722:IIKWbvaS4F4MZyri@mal3020db.9fatm.mongodb.net/?retryWrites=true&w=majority&appName=MAL3020db";
 
@@ -18,6 +35,7 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   }
 });
+
 
 app.get("/api/flights", async (req, res) => {
   try {
@@ -38,6 +56,92 @@ app.get("/api/flights", async (req, res) => {
   }
 });
 
+app.post("/api/flights", async (req, res) => {
+  try {
+    await client.connect();
+    const database = client.db("Flight");
+    const collection = database.collection("flights");
+    
+    const newFlight = req.body;
+    if (!newFlight._id) {
+      newFlight._id = `flight${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
+    }
+    
+    const result = await collection.insertOne(newFlight);
+    res.status(201).json({
+      message: "Flight created successfully",
+      flight: newFlight
+    });
+  } catch (error) {
+    console.error("Error creating flight:", error);
+    res.status(500).json({ message: "Failed to create flight" });
+  } finally {
+    await client.close();
+  }
+});
+
+app.put("/api/flights/:id", async (req, res) => {
+  try {
+    await client.connect();
+    const database = client.db("Flight");
+    const collection = database.collection("flights");
+    
+    const flightId = req.params.id;
+    const updatedFlight = req.body;
+    delete updatedFlight._id; 
+    
+    const result = await collection.updateOne(
+      { _id: flightId },
+      { $set: updatedFlight }
+    );
+    
+    if (result.matchedCount === 0) {
+      res.status(404).json({ message: "Flight not found" });
+      return;
+    }
+
+    const updatedFlightDoc = await collection.findOne({ _id: flightId });
+    io.emit("flightUpdated", updatedFlightDoc);
+    
+    res.status(200).json({
+      message: "Flight updated successfully",
+      modifiedCount: result.modifiedCount
+    });
+  } catch (error) {
+    console.error("Error updating flight:", error);
+    res.status(500).json({ message: "Failed to update flight" });
+  } finally {
+    await client.close();
+  }
+});
+
+app.delete("/api/flights/:id", async (req, res) => {
+  try {
+    await client.connect();
+    const database = client.db("Flight");
+    const collection = database.collection("flights");
+    
+    const flightId = req.params.id;
+    const result = await collection.deleteOne({ _id: flightId });
+    
+    if (result.deletedCount === 0) {
+      res.status(404).json({ message: "Flight not found" });
+      return;
+    }
+    
+    res.status(200).json({
+      message: "Flight deleted successfully",
+      deletedCount: result.deletedCount
+    });
+  } catch (error) {
+    console.error("Error deleting flight:", error);
+    res.status(500).json({ message: "Failed to delete flight" });
+  } finally {
+    await client.close();
+  }
+});
+
+
 // New route for IATA codes
 app.get("/api/iata-codes", async (req, res) => {
   try {
@@ -48,16 +152,118 @@ app.get("/api/iata-codes", async (req, res) => {
 
     const iataCodes = await collection.find({}).toArray();
 
-    // Optional: Remove the MongoDB ObjectId if you want a cleaner response
-    const cleanedIataCodes = iataCodes.map(({ _id, ...rest }) => rest);
+    // // Optional: Remove the MongoDB ObjectId if you want a cleaner response
+    // const cleanedIataCodes = iataCodes.map(({ _id, ...rest }) => rest);
 
-    res.status(200).json(cleanedIataCodes);
+    res.status(200).json(iataCodes);
   } catch (error) {
     console.error("Error retrieving IATA codes:", error);
     res.status(500).json({ message: "Failed to retrieve IATA codes" });
   }
   finally {
     await client.close(); 
+  }
+});
+
+// POST - Create new IATA code
+app.post("/api/iata-codes", async (req, res) => {
+  try {
+    await client.connect();
+    const database = client.db("Flight");
+    const collection = database.collection("iata_codes");
+    
+    const newIataCode = {
+      iataCode: req.body.iataCode,
+      airportName: req.body.airportName,
+      city: req.body.city,
+      country: req.body.country
+    };
+
+    // Validate required fields
+    if (!newIataCode.iataCode || !newIataCode.airportName || !newIataCode.city || !newIataCode.country) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const result = await collection.insertOne(newIataCode);
+    res.status(201).json({
+      message: "IATA code created successfully",
+      _id: result.insertedId,
+      ...newIataCode
+    });
+  } catch (error) {
+    console.error("Error creating IATA code:", error);
+    res.status(500).json({ message: "Failed to create IATA code" });
+  } finally {
+    await client.close();
+  }
+});
+
+// PUT - Update IATA code
+app.put("/api/iata-codes/:id", async (req, res) => {
+  try {
+    await client.connect();
+    const database = client.db("Flight");
+    const collection = database.collection("iata_codes");
+
+    const id = req.params.id;
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid ID format" });
+    }
+    
+    const updateData = {
+      iataCode: req.body.iataCode,
+      airportName: req.body.airportName,
+      city: req.body.city,
+      country: req.body.country
+    };
+
+    // Validate required fields
+    if (!updateData.iataCode || !updateData.airportName || !updateData.city || !updateData.country) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const result = await collection.updateOne(
+      { _id: new ObjectId(req.params.id) },
+      { $set: updateData }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: "IATA code not found" });
+    }
+
+    res.status(200).json({
+      message: "IATA code updated successfully",
+      ...updateData
+    });
+  } catch (error) {
+    console.error("Error updating IATA code:", error);
+    res.status(500).json({ message: "Failed to update IATA code" });
+  } finally {
+    await client.close();
+  }
+});
+
+// DELETE - Delete IATA code
+app.delete("/api/iata-codes/:id", async (req, res) => {
+  try {
+    await client.connect();
+    const database = client.db("Flight");
+    const collection = database.collection("iata_codes");
+
+    const result = await collection.deleteOne({
+      _id: new ObjectId(req.params.id)
+    });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "IATA code not found" });
+    }
+
+    res.status(200).json({ message: "IATA code deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting IATA code:", error);
+    res.status(500).json({ message: "Failed to delete IATA code" });
+  } finally {
+    await client.close();
   }
 });
 
@@ -372,14 +578,147 @@ app.post("/api/bookings", async (req, res) => {
   }
 });
 
+// Simple password hashing 
+const simpleHashPassword = (password) => {
+  let hash = 0;
+  for (let i = 0; i < password.length; i++) {
+    const char = password.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  return hash.toString();
+};
+
+// Get all admins
+app.get("/api/admins", async (req, res) => {
+  try {
+    await client.connect();
+    
+    const database = client.db("Flight");
+    const collection = database.collection("admin");
+    
+    const admins = await collection.find({}).toArray();
+    
+    // Remove sensitive information before sending response
+    const sanitizedAdmins = admins.map(({ passwordHash, ...rest }) => rest);
+    
+    res.status(200).json(sanitizedAdmins);
+  } catch (error) {
+    console.error("Error retrieving admins:", error);
+    res.status(500).json({ message: "Failed to retrieve admins" });
+  } finally {
+    await client.close();
+  }
+});
+
+// Create new admin
+app.post("/api/admins", async (req, res) => {
+  try {
+    await client.connect();
+    
+    const database = client.db("Flight");
+    const collection = database.collection("admin");
+    
+    // Extract admin data from request body
+    const { 
+      email, 
+      password  // Now expecting password instead of passwordHash
+    } = req.body;
+
+    // Basic validation
+    if (!email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Check if admin already exists
+    const existingAdmin = await collection.findOne({ email: email });
+
+    if (existingAdmin) {
+      return res.status(409).json({ message: "Admin already exists" });
+    }
+
+    // Hash the password
+    const passwordHash = simpleHashPassword(password);
+
+    // Prepare admin object
+    const newAdmin = {
+      _id: `admin${Date.now()}`,
+      email,
+      passwordHash, // Store the hashed password
+      createdAt: new Date().toISOString()
+    };
+
+    // Insert the new admin
+    const result = await collection.insertOne(newAdmin);
+
+    // Respond with success message
+    res.status(201).json({
+      message: "Admin created successfully",
+      adminId: result.insertedId
+    });
+
+  } catch (error) {
+    console.error("Error creating admin:", error);
+    res.status(500).json({ message: "Failed to create admin" });
+  } finally {
+    await client.close();
+  }
+});
+
+// Admin login
+app.post("/api/admin/login", async (req, res) => {
+  try {
+    await client.connect();
+    
+    const database = client.db("Flight");
+    const collection = database.collection("admin");
+    
+    // Extract email and password from request body
+    const { email, passwordHash } = req.body;
+
+    // Basic validation
+    if (!email || !passwordHash) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+
+    // Find admin by email and hashed password
+    const admin = await collection.findOne({ 
+      email: email, 
+      passwordHash: passwordHash 
+    });
+
+    // Check if admin exists
+    if (admin) {
+      // Login successful
+      return res.status(200).json({
+        message: "Admin login successful",
+        admin: {
+          id: admin._id,
+          email: admin.email
+        }
+      });
+    } else {
+      // Login failed
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+  } catch (error) {
+    console.error("Error during admin login:", error);
+    res.status(500).json({ message: "Login failed" });
+  } finally {
+    await client.close();
+  }
+});
+
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Flight API!");
 });
 
-app.listen(port, () => {
+httpServer.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
 
 // async function run() {
 //   try {
