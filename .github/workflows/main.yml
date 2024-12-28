@@ -7,7 +7,7 @@ on:
     branches: [ main, master ]
 
 jobs:
-  backend-test:
+  backend:
     runs-on: ubuntu-latest
     
     defaults:
@@ -79,7 +79,7 @@ jobs:
       run: npm ci
   
   build:
-    needs: [frontend-test, lint]
+    needs: [backend, frontend-test, lint]
     runs-on: ubuntu-latest
     
     steps:
