@@ -97,7 +97,7 @@ const AdminAirports = () => {
         <div className="admin-flights">
       <h1>Manage IATA Codes</h1>
       
-      <button className="btn btn-add" onClick={() => handleOpenModal()}>
+      <button data-testid="add-iata-button" className="btn btn-add" onClick={() => handleOpenModal()}>
         Add New IATA Code
       </button>
 
@@ -113,20 +113,22 @@ const AdminAirports = () => {
         </thead>
         <tbody>
           {iataCodes.map((iata) => (
-            <tr key={iata._id}>
-              <td>{iata.iataCode}</td>
+            <tr key={iata._id} data-testid={`iata-row-${iata._id}`}>
+              <td data-testid={`iata-code-${iata._id}`}>{iata.iataCode}</td>
               <td>{iata.airportName}</td>
               <td>{iata.city}</td>
               <td>{iata.country}</td>
               <td>
                 <div className="action-buttons">
-                  <button 
+                  <button
+                    data-testid={`edit-iata-${iata._id}`} 
                     className="btn btn-edit"
                     onClick={() => handleOpenModal(iata)}
                   >
                     Edit
                   </button>
-                  <button 
+                  <button
+                    data-testid={`delete-iata-${iata._id}`} 
                     className="btn btn-delete"
                     onClick={() => handleDelete(iata._id)}
                   >
@@ -142,11 +144,12 @@ const AdminAirports = () => {
       {showModal && (
         <div className="modal">
           <div className="modal-content">
-            <h2>{editingId ? 'Edit IATA Code' : 'Add New IATA Code'}</h2>
+            <h2 data-testid="modal-title">{editingId ? 'Edit IATA Code' : 'Add New IATA Code'}</h2>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label>IATA Code</label>
                 <input
+                  data-testid="iata-code-input"
                   type="text"
                   name="iataCode"
                   value={formData.iataCode}
@@ -157,6 +160,7 @@ const AdminAirports = () => {
               <div className="form-group">
                 <label>Airport Name</label>
                 <input
+                  data-testid="airport-name-input"
                   type="text"
                   name="airportName"
                   value={formData.airportName}
@@ -167,6 +171,7 @@ const AdminAirports = () => {
               <div className="form-group">
                 <label>City</label>
                 <input
+                  data-testid="city-input"
                   type="text"
                   name="city"
                   value={formData.city}
@@ -177,6 +182,7 @@ const AdminAirports = () => {
               <div className="form-group">
                 <label>Country</label>
                 <input
+                data-testid="country-input"
                   type="text"
                   name="country"
                   value={formData.country}
@@ -192,7 +198,7 @@ const AdminAirports = () => {
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-add">
+                <button data-testid="submit-iata-button" type="submit" className="btn btn-add">
                   {editingId ? 'Update' : 'Add'}
                 </button>
               </div>

@@ -130,12 +130,13 @@ const SignIn = ({ onClose, onLoginSuccess }) => {
           <button className="close-button" onClick={onClose}>
             &times;
           </button>
-          <form onSubmit={handleSubmit} className="signin-form">
+          <form onSubmit={handleSubmit} className="signin-form" role="form">
             <h2 className="signin-title">Sign In</h2>
 
             <div className="form-group">
-              <label>Email Address</label>
+              <label htmlFor="email">Email Address</label>
               <input 
+                id="email"
                 type="email" 
                 name="email" 
                 value={formData.email}
@@ -147,8 +148,9 @@ const SignIn = ({ onClose, onLoginSuccess }) => {
             </div>
 
             <div className="form-group">
-              <label>Password</label>
+              <label htmlFor="password">Password</label>
               <input 
+                id="password"
                 type="password" 
                 name="password" 
                 value={formData.password}

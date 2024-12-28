@@ -13,6 +13,8 @@ const HistoryDetail = () => {
     const [showSignIn, setShowSignIn] = useState(false);
     const [qrCodes, setQrCodes] = useState({});
     const { bookingData } = location.state || {};
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         checkLoginStatus();
@@ -20,6 +22,47 @@ const HistoryDetail = () => {
             generateAllQRCodes();
         }
     }, [bookingData]);
+
+    const handleCancelBooking = async () => {
+        if (!bookingData?._id) return;
+        
+        if (!confirm('Are you sure you want to cancel this booking?')) {
+            return;
+        }
+
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/bookings/${bookingData._id}/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    status: 'Cancelled'
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to cancel booking');
+            }
+
+            // Update the local state to reflect the cancellation
+            const updatedBookingData = {
+                ...bookingData,
+                status: 'Cancelled'
+            };
+            location.state = { bookingData: updatedBookingData };
+            
+            alert('Booking cancelled successfully');
+        } catch (err) {
+            setError('Failed to cancel booking. Please try again later.');
+            console.error('Error cancelling booking:', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const checkLoginStatus = () => {
         const session = localStorage.getItem('userSession');
@@ -76,10 +119,12 @@ const HistoryDetail = () => {
         return <div className="loading">No booking data available</div>;
     }
 
+    const isCancellable = bookingData.status !== 'Cancelled';
+
     return (
         <div className="historyDetail">
             <div className="history-detail">
-            <div className="booking-detail">
+            <div className="booking-detail" data-testid="booking-detail">
                 <div className="detail-container">
                     <div className="header">
                         <div className="status-icon">
@@ -100,9 +145,9 @@ const HistoryDetail = () => {
                             <h2>{index === 0 ? 'Departure Flight' : 'Return Flight'}</h2>
                             <div className="flight-info">
                                 <div className="flight-route">
-                                <span className="airport">{flight.departureLocation}</span>
+                                <span className="airport" data-testid="detail-departure">{flight.departureLocation}</span>
                                 <span className="arrow">→</span>
-                                <span className="airport">{flight.arrivalLocation}</span>
+                                <span className="airport" data-testid="detail-arrival">{flight.arrivalLocation}</span>
                                 </div>
                                 <div className="flight-times">
                                 <div className="time-group">
@@ -126,7 +171,7 @@ const HistoryDetail = () => {
                         <div className="passengers-section">
                         {/* Main Passenger */}
                         {bookingData.flights && bookingData.flights[0] && (
-                            <div className="passenger-details-card">
+                            <div className="passenger-details-card" data-testid="passenger-details">
                             <h2>Passenger Information</h2>
                             <div className="main-passenger">
                                 <h3>Main Passenger</h3>
@@ -197,11 +242,11 @@ const HistoryDetail = () => {
                         )}
 
                         {/* Price Summary Section */}
-                        <div className="price-summary-card">
+                        <div className="price-summary-card" data-testid="price-summary">
                         <h2>Price Summary</h2>
                         <div className="total-price">
                             <span>Total Amount Paid</span>
-                            <span className="price">RM {bookingData.totalPrice}</span>
+                            <span className="price" data-testid="booking-detail-price">RM {bookingData.totalPrice}</span>
                         </div>
                         </div>
                     
@@ -209,10 +254,25 @@ const HistoryDetail = () => {
                         <button onClick={() => window.print()} className="print-button">
                             Print Details
                         </button>
+                        {isCancellable && (
+                                <button 
+                                    onClick={handleCancelBooking}
+                                    className="cancel-button"
+                                    data-testid="cancel-booking-button"
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'Cancelling...' : 'Cancel Booking'}
+                                </button>
+                            )}
                         <button onClick={() => navigate('/history')} className="back-button">
                             Back to History
                         </button>
                     </div>
+                    {error && (
+                            <div className="error-message">
+                                {error}
+                            </div>
+                        )}
                 </div>
             </div>
 

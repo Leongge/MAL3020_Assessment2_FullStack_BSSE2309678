@@ -25,8 +25,7 @@ io.on("connection", (socket) => {
   });
 });
 
-const uri = "mongodb+srv://leong10722:IIKWbvaS4F4MZyri@mal3020db.9fatm.mongodb.net/?retryWrites=true&w=majority&appName=MAL3020db";
-
+const uri = "mongodb+srv://leong10722:kkkk10722@mal3020db.9fatm.mongodb.net/?retryWrites=true&w=majority&appName=MAL3020db";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -289,7 +288,6 @@ app.get("/api/states", async (req, res) => {
   }
 });
 
-// Add this new endpoint after your existing routes
 app.get("/api/users", async (req, res) => {
   try {
     await client.connect();
@@ -416,6 +414,40 @@ app.post("/api/login", async (req, res) => {
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ message: "Login failed" });
+  } finally {
+    await client.close();
+  }
+});
+
+app.delete("/api/users/:id", async (req, res) => {
+  try {
+    await client.connect();
+    const database = client.db("Flight");
+    const collection = database.collection("users");
+
+    // Validate the ID format
+    const id = req.params.id;
+
+    const user = await collection.findOne({ _id: id });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    // Attempt to delete the user
+    const result = await collection.deleteOne({
+      _id: id
+    });
+
+    // Emit a socket event to notify connected clients
+    io.emit("userDeleted", { userId: id });
+
+    res.status(200).json({ 
+      message: "User deleted successfully",
+      userId: id 
+    });
+
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ message: "Failed to delete user" });
   } finally {
     await client.close();
   }
@@ -579,6 +611,110 @@ app.post("/api/bookings", async (req, res) => {
   }
 });
 
+// Update booking status
+app.put("/api/bookings/:bookingId/status", async (req, res) => {
+  try {
+    const { status } = req.body;
+    const { bookingId } = req.params;
+
+    // Validate status
+    const validStatuses = ["Confirmed", "Cancelled", "Pending", "Completed"];
+    if (!status || !validStatuses.includes(status)) {
+      return res.status(400).json({
+        message: "Invalid status. Status must be one of: " + validStatuses.join(", ")
+      });
+    }
+
+    await client.connect();
+    const database = client.db("Flight");
+    const collection = database.collection("bookings");
+
+    // Update the booking status
+    const result = await collection.updateOne(
+      { _id: bookingId },
+      { $set: { status: status } }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({
+        message: "Booking not found"
+      });
+    }
+
+    if (result.modifiedCount === 0) {
+      return res.status(400).json({
+        message: "Status is already set to " + status
+      });
+    }
+
+    // Emit socket event to notify clients of the status change
+    io.emit("bookingStatusUpdated", {
+      bookingId: bookingId,
+      newStatus: status
+    });
+
+    res.status(200).json({
+      message: "Booking status updated successfully",
+      bookingId: bookingId,
+      newStatus: status
+    });
+
+  } catch (error) {
+    console.error("Error updating booking status:", error);
+    res.status(500).json({
+      message: "Failed to update booking status"
+    });
+  } finally {
+    await client.close();
+  }
+});
+
+app.delete("/api/bookings/:bookingId", async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+
+    await client.connect();
+    const database = client.db("Flight");
+    const collection = database.collection("bookings");
+
+    // Find the booking first to check if it exists
+    const booking = await collection.findOne({ _id: bookingId });
+
+    if (!booking) {
+      return res.status(404).json({
+        message: "Booking not found"
+      });
+    }
+
+    // Delete the booking
+    const result = await collection.deleteOne({ _id: bookingId });
+
+    if (result.deletedCount === 0) {
+      return res.status(400).json({
+        message: "Failed to delete booking"
+      });
+    }
+
+    // Emit socket event to notify clients of the deletion
+    io.emit("bookingDeleted", {
+      bookingId: bookingId
+    });
+
+    res.status(200).json({
+      message: "Booking deleted successfully",
+      bookingId: bookingId
+    });
+
+  } catch (error) {
+    console.error("Error deleting booking:", error);
+    res.status(500).json({
+      message: "Failed to delete booking"
+    });
+  } finally {
+    await client.close();
+  }
+});
+
 // Simple password hashing 
 const simpleHashPassword = (password) => {
   let hash = 0;
@@ -711,26 +847,57 @@ app.post("/api/admin/login", async (req, res) => {
   }
 });
 
+// Delete admin by ID
+app.delete("/api/admins/:adminId", async (req, res) => {
+  try {
+    await client.connect();
+    
+    const database = client.db("Flight");
+    const collection = database.collection("admin");
+    
+    const adminId = req.params.adminId;
+
+    // Basic validation
+    if (!adminId) {
+      return res.status(400).json({ message: "Admin ID is required" });
+    }
+
+    // Find and delete the admin
+    const result = await collection.deleteOne({ _id: adminId });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+
+    // Notify connected clients about the deletion using Socket.IO
+    io.emit('adminDeleted', { adminId });
+
+    res.status(200).json({ 
+      message: "Admin deleted successfully",
+      deletedId: adminId
+    });
+
+  } catch (error) {
+    console.error("Error deleting admin:", error);
+    res.status(500).json({ message: "Failed to delete admin" });
+  } finally {
+    await client.close();
+  }
+});
+
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Flight API!");
 });
 
+// In app.js
+app.locals.client = client;
+
+// At the end of app.js
 httpServer.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server running on port ${port}`);
 });
 
+module.exports = httpServer;
 
-// async function run() {
-//   try {
-//     // Connect the client to the server	(optional starting in v4.7)
-//     await client.connect();
-//     // Send a ping to confirm a successful connection
-//     await client.db("admin").command({ ping: 1 });
-//     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-//   } finally {
-//     // Ensures that the client will close when you finish/error
-//     await client.close();
-//   }
-// }
-// run().catch(console.dir);
+

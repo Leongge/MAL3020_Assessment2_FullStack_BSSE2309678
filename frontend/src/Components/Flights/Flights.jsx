@@ -363,6 +363,7 @@ const Flights = () => {
                                 placeholderText='Add date'
                                 className='datepicker-input'
                                 minDate={new Date()}
+                                data-testid="departure-date-input"
                             />
                         </div>
                     </div>
@@ -380,6 +381,7 @@ const Flights = () => {
                                 placeholderText='Add date'
                                 className='datepicker-input'
                                 minDate={departureDate || new Date()}
+                                data-testid="return-date-input"
                             />
                         </div>
                     </div>

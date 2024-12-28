@@ -214,16 +214,16 @@ const AdminFlights = () => {
             <div className="admin-flights">
             <div className="header">
                 <h1>Flight Management</h1>
-                <button className="add-button" onClick={() => setShowModal(true)}>
+                <button className="add-button" data-testid="add-flight-button" onClick={() => setShowModal(true)}>
                     Add New Flight
                 </button>
             </div>
 
             <div className="flights-list">
                 {flights.map(flight => (
-                    <div key={flight._id} className="flight-card">
+                    <div key={flight._id} className="flight-card" data-testid={`flight-card-${flight._id}`}>
                         <div className="flight-info">
-                            <h3>{flight.airline} - {flight.flightNumber}</h3>
+                            <h3 data-testid={`flight-title-${flight._id}`}>{flight.airline} - {flight.flightNumber}</h3>
                             <p>Route: {flight.departureAirport} → {flight.arrivalAirport}</p>
                             <p>Departure: {new Date(flight.departureTime).toLocaleString()}</p>
                             <p>Arrival: {new Date(flight.arrivalTime).toLocaleString()}</p>
@@ -232,8 +232,8 @@ const AdminFlights = () => {
                             <p>Class: {flight.type}</p>
                         </div>
                         <div className="flight-actions">
-                            <button onClick={() => handleEdit(flight)}>Edit</button>
-                            <button onClick={() => handleDelete(flight._id)}>Delete</button>
+                            <button data-testid={`edit-flight-${flight._id}`} onClick={() => handleEdit(flight)}>Edit</button>
+                            <button data-testid={`delete-flight-${flight._id}`} onClick={() => handleDelete(flight._id)}>Delete</button>
                         </div>
                     </div>
                 ))}
@@ -242,7 +242,7 @@ const AdminFlights = () => {
             {showModal && (
                 <div className="modal">
                     <div className="modal-content">
-                        <h2>{editingFlight ? 'Edit Flight' : 'Add New Flight'}</h2>
+                        <h2  data-testid="modal-title">{editingFlight ? 'Edit Flight' : 'Add New Flight'}</h2>
                         <form onSubmit={handleSubmit}>
                             <div className="form-row">
                                 <div className="form-group">
@@ -250,6 +250,7 @@ const AdminFlights = () => {
                                     <input
                                         type="text"
                                         name="airline"
+                                        data-testid="airline-input"
                                         value={formData.airline}
                                         onChange={handleInputChange}
                                         required
@@ -260,6 +261,7 @@ const AdminFlights = () => {
                                     <input
                                         type="text"
                                         name="flightNumber"
+                                        data-testid="flight-number-input"
                                         value={formData.flightNumber}
                                         onChange={handleInputChange}
                                         required
@@ -386,6 +388,7 @@ const AdminFlights = () => {
                                                 <input
                                                     type="text"
                                                     value={addon.type}
+                                                    data-testid={`addon-type-${index}`}
                                                     onChange={(e) => handleAddonChange(index, 'type', e.target.value)}
                                                 />
                                             </div>
@@ -394,6 +397,7 @@ const AdminFlights = () => {
                                                 <input
                                                     type="text"
                                                     value={addon.description}
+                                                    data-testid={`addon-description-${index}`}
                                                     onChange={(e) => handleAddonChange(index, 'description', e.target.value)}
                                                 />
                                             </div>
@@ -402,6 +406,7 @@ const AdminFlights = () => {
                                                 <input
                                                     type="number"
                                                     value={addon.price}
+                                                    data-testid={`addon-price-${index}`}
                                                     onChange={(e) => handleAddonChange(index, 'price', e.target.value)}
                                                 />
                                             </div>
@@ -418,10 +423,10 @@ const AdminFlights = () => {
                             </div>
 
                             <div className="modal-actions">
-                                <button type="submit">
+                                <button type="submit" data-testid="submit-flight-button">
                                     {editingFlight ? 'Update Flight' : 'Create Flight'}
                                 </button>
-                                <button type="button" onClick={() => {
+                                <button type="button" data-testid="cancel-flight-button"  onClick={() => {
                                     setShowModal(false);
                                     resetForm();
                                 }}>

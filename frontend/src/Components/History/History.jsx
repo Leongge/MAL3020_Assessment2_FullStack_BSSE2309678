@@ -64,31 +64,53 @@ const History = () => {
         navigate(`/history/${booking._id}`, { state: { bookingData: booking } });
     };
 
+    const getStatusStyle = (status) => {
+        switch (status) {
+            case 'Cancelled':
+                return {
+                    color: '#dc2626',
+                    fontWeight: 'bold'
+                };
+            case 'Confirmed':
+                return {
+                    color: '#4CAF50',
+                    fontWeight: 'bold'
+                };
+            default:
+                return {
+                    color: 'inherit',
+                    fontWeight: 'normal'
+                };
+        }
+    };
+
     if (loading) {
-        return <div className="loading">Loading...</div>;
+        return <div className="loading" data-testid="loading">Loading...</div>;
     }
 
     return (
         <div className="history">
             <div className="history-page">
             <h1>Booking History</h1>
-            <div className="booking-cards">
+            <div className="booking-cards" data-testid="booking-cards">
                 {bookings.map((booking) => (
                     <div 
                         key={booking._id} 
                         className="booking-card"
+                        data-testid={`booking-card-${booking._id}`}
                         onClick={() => navigateToDetail(booking)}
                     >
                         <div className="booking-header">
                             <span>Booking ID: {booking._id}</span>
-                            <span className="booking-status">{booking.status}</span>
+                            <span className={`booking-status ${booking.status.toLowerCase()}`}
+                             style={getStatusStyle(booking.status)}>{booking.status}</span>
                         </div>
                         {booking.flights.map((flight, index) => (
                             <div key={index} className="flight-info">
                                 <div className="route">
-                                    <span>{flight.departureLocation}</span>
+                                    <span data-testid="history-departure">{flight.departureLocation}</span>
                                     <span className="arrow">→</span>
-                                    <span>{flight.arrivalLocation}</span>
+                                    <span data-testid="history-arrival">{flight.arrivalLocation}</span>
                                 </div>
                                 <div className="datetime">
                                     <div>
@@ -103,7 +125,7 @@ const History = () => {
                             </div>
                         ))}
                         <div className="booking-footer">
-                            <span>Total Price: RM {booking.totalPrice}</span>
+                            <span data-testid="booking-card-price">Total Price: RM {booking.totalPrice}</span>
                             <span>{new Date(booking.bookingDate).toLocaleDateString()}</span>
                         </div>
                     </div>

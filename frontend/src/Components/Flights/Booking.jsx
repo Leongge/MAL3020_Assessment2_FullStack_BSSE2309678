@@ -4,6 +4,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import SignIn from './SignIn';
 import QRCode from 'qrcode';
+import { io } from 'socket.io-client';
+const socket = io('http://localhost:3000');
 
 // Import AOS =====>
 import Aos from "aos"
@@ -280,6 +282,27 @@ useEffect(() => {
         return;
       }
 
+      const totalPassengers = 1 + passengerCounts.adult + passengerCounts.child; // 1 for main passenger
+
+      // Update departure flight available seats
+      const updatedDepartureFlight = {
+        ...departureFlight,
+        availableSeats: departureFlight.availableSeats - totalPassengers
+      };
+
+      // Update departure flight in database
+      const departureResponse = await fetch(`http://localhost:3000/api/flights/${departureFlight._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedDepartureFlight)
+      });
+
+      if (!departureResponse.ok) {
+        throw new Error('Failed to update departure flight seats');
+      }
+
       // Prepare flights data
       const flights = [];
       
@@ -319,6 +342,23 @@ useEffect(() => {
         }]
       };
       flights.push(returnTripData);
+
+      const updatedReturnFlight = {
+        ...returnFlight,
+        availableSeats: returnFlight.availableSeats - totalPassengers
+      };
+
+      const returnResponse = await fetch(`http://localhost:3000/api/flights/${returnFlight._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedReturnFlight)
+      });
+
+      if (!returnResponse.ok) {
+        throw new Error('Failed to update return flight seats');
+      }
     }
 
       // Prepare addons

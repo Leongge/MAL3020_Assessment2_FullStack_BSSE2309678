@@ -34,12 +34,10 @@ const AppContent = () => {
         <Route path="/" element={
           <>
             <Home />
-            <Search />
             <Support />
             <Info />
             <Lounge />
             <Travelers />
-            <Subscribers />
             <Footer />
           </>
         } />

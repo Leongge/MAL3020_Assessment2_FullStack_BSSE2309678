@@ -130,7 +130,7 @@ const SignIn = ({ onClose, onLoginSuccess }) => {
           <button className="close-button" onClick={onClose}>
             &times;
           </button>
-          <form onSubmit={handleSubmit} className="signin-form">
+          <form onSubmit={handleSubmit} className="signin-form" data-testid="signin-form">
             <h2 className="signin-title">Sign In</h2>
 
             <div className="form-group">
@@ -138,6 +138,7 @@ const SignIn = ({ onClose, onLoginSuccess }) => {
               <input 
                 type="email" 
                 name="email" 
+                data-testid="email-input"
                 value={formData.email}
                 onChange={handleChange}
                 required 
@@ -151,6 +152,7 @@ const SignIn = ({ onClose, onLoginSuccess }) => {
               <input 
                 type="password" 
                 name="password" 
+                data-testid="password-input"
                 value={formData.password}
                 onChange={handleChange}
                 required 
@@ -162,6 +164,7 @@ const SignIn = ({ onClose, onLoginSuccess }) => {
             <button 
               type="submit" 
               className="submit-button"
+              data-testid="signin-button"
             >
               Sign In
             </button>

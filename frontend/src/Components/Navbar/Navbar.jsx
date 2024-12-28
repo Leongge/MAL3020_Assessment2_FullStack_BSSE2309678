@@ -56,7 +56,7 @@ const Navbar = () => {
               <li onClick={removeNavBar} className="listItem"><Link to="/">Home</Link></li>
               <li onClick={removeNavBar} className="listItem"><Link to="/flights">Flight</Link></li>
               <li onClick={removeNavBar} className="listItem"><Link to="/history">History</Link></li>
-              <li onClick={removeNavBar} className="listItem">Seats</li>
+              {/* <li onClick={removeNavBar} className="listItem">Seats</li> */}
               <li onClick={removeNavBar} className="listItem"><Link to="/signup">Sign Up</Link></li>
             </ul> 
 
