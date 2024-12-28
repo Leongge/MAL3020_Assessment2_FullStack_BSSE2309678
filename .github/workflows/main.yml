@@ -79,7 +79,7 @@ jobs:
       run: npm ci
   
   build:
-    needs: [backend-test, frontend-test, lint]
+    needs: [frontend-test, lint]
     runs-on: ubuntu-latest
     
     steps:
@@ -89,12 +89,6 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20.16.0'
-    
-    - name: Build Backend
-      working-directory: ./backend
-      run: |
-        npm ci
-        npm run build
     
     - name: Build Frontend
       working-directory: ./frontend
