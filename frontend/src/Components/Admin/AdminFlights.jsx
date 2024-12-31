@@ -20,7 +20,7 @@ const AdminFlights = () => {
         arrivalAirport: '',
         departureTime: null,
         arrivalTime: null,
-        price: '',
+        price: 0,
         availableSeats: '',
         type: 'Economy',
         addons: []
@@ -118,6 +118,12 @@ const AdminFlights = () => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+        if (name === 'price') {
+            const numericValue = parseFloat(value) || 0;
+            setFormData({ ...formData, [name]: numericValue });
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -179,7 +185,7 @@ const AdminFlights = () => {
             arrivalAirport: '',
             departureTime: null,
             arrivalTime: null,
-            price: '',
+            price: 0,
             availableSeats: '',
             type: 'Economy',
             addons: []
@@ -200,7 +206,11 @@ const AdminFlights = () => {
 
     const handleAddonChange = (index, field, value) => {
         const newAddons = [...formData.addons];
-        newAddons[index][field] = value;
+        if (field === 'price') {
+            newAddons[index][field] = parseFloat(value) || 0;
+        } else {
+            newAddons[index][field] = value;
+        }
         setFormData({ ...formData, addons: newAddons });
     };
 
