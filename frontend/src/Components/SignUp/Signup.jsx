@@ -158,7 +158,7 @@ const RegisterPage = () => {
       }
 
       // Redirect or show success message
-      window.location.href = '/login';
+      window.location.href = '/flights';
 
     } catch (error) {
       console.error('Registration error:', error);
