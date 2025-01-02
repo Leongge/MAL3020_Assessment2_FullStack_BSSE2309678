@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84.88% </span>
+                <span class="strong">84.75% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>320/377</span>
+                <span class='fraction'>328/387</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.72% </span>
+                <span class="strong">70.27% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>24/33</span>
+                <span class='fraction'>26/37</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84.88% </span>
+                <span class="strong">84.75% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>320/377</span>
+                <span class='fraction'>328/387</span>
             </div>
         
             
@@ -507,7 +507,17 @@
 <a name='L442'></a><a href='#L442'>442</a>
 <a name='L443'></a><a href='#L443'>443</a>
 <a name='L444'></a><a href='#L444'>444</a>
-<a name='L445'></a><a href='#L445'>445</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a>
+<a name='L447'></a><a href='#L447'>447</a>
+<a name='L448'></a><a href='#L448'>448</a>
+<a name='L449'></a><a href='#L449'>449</a>
+<a name='L450'></a><a href='#L450'>450</a>
+<a name='L451'></a><a href='#L451'>451</a>
+<a name='L452'></a><a href='#L452'>452</a>
+<a name='L453'></a><a href='#L453'>453</a>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -625,6 +635,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">63x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
@@ -710,6 +726,10 @@
 <span class="cline-any cline-yes">63x</span>
 <span class="cline-any cline-yes">38x</span>
 <span class="cline-any cline-yes">38x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">38x</span>
+<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">36x</span>
 <span class="cline-any cline-yes">38x</span>
 <span class="cline-any cline-yes">38x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -973,7 +993,7 @@ const AdminFlights = () =&gt; {
         arrivalAirport: '',
         departureTime: null,
         arrivalTime: null,
-        price: '',
+        price: 0,
         availableSeats: '',
         type: 'Economy',
         addons: []
@@ -1071,6 +1091,12 @@ const AdminFlights = () =&gt; {
     const handleInputChange = (e) =&gt; {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+        if (name === 'price') <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >            const numericValue = parseFloat(value) || 0;</span>
+<span class="cstat-no" title="statement not covered" >            setFormData({ ...formData, [name]: numericValue });</span>
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
     };
 &nbsp;
     const handleSubmit = async (e) =&gt; {
@@ -1132,7 +1158,7 @@ const AdminFlights = () =&gt; {
             arrivalAirport: '',
             departureTime: null,
             arrivalTime: null,
-            price: '',
+            price: 0,
             availableSeats: '',
             type: 'Economy',
             addons: []
@@ -1153,7 +1179,11 @@ const AdminFlights = () =&gt; {
 &nbsp;
     const handleAddonChange = (index, field, value) =&gt; {
         const newAddons = [...formData.addons];
-        newAddons[index][field] = value;
+        if (field === 'price') {
+            newAddons[index][field] = parseFloat(value<span class="branch-0 cbranch-no" title="branch not covered" >) || 0;</span>
+        } else {
+            newAddons[index][field] = value;
+        }
         setFormData({ ...formData, addons: newAddons });
     };
 &nbsp;
@@ -1402,7 +1432,7 @@ export default AdminFlights;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-28T09:13:01.828Z
+                at 2025-01-02T10:03:10.859Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

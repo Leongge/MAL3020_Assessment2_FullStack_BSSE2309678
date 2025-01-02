@@ -338,7 +338,7 @@ useEffect(() => {
           phone: mainPassenger.phone,
           Address: mainPassenger.address,
           IdentityNo: mainPassenger.identityNo,
-          qrCode: "encrypted_qr_main_passenger" // This will be handled by backend
+          qrCode: "encrypted_qr_main_passenger" 
         }]
       };
       flights.push(returnTripData);
